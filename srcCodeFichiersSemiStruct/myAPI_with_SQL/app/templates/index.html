@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion Patient - MVC</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; }
+        input, textarea { width: 300px; padding: 5px; margin-top: 5px; }
+        input[type="submit"] { width: 100px; background-color: #4CAF50; color: white; cursor: pointer; border: none; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Formulaire d'ajout de Patient</h2>
+
+    <form action="http://127.0.0.1:5000/add" method="POST">
+        
+        <div class="form-group">
+            <label>Nom :</label>
+            <input type="text" name="n" placeholder="Ex: Hafsa" required />
+        </div>
+
+        <div class="form-group">
+            <label>AddR (Adresse) :</label>
+            <textarea name="add" placeholder="Ex: 122 rue Paul Armangot"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>PIN (Code) :</label>
+            <input type="text" name="pin" placeholder="Ex: 123" />
+        </div>
+
+        <div class="form-group">
+            <label>Groupe Sanguin :</label>
+            <input type="text" name="gs" placeholder="Ex: A+" />
+        </div>
+
+        <div class="form-group">
+            <label>Maladie :</label>
+            <input type="text" name="maladie" placeholder="Ex: Rhume" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Send" />
+        </div>
+
+    </form>
+
+</body>
+</html>
