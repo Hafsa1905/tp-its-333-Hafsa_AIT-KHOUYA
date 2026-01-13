@@ -1,55 +1,70 @@
 from flask import render_template, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from app import app
 import sqlite3
 
-# Import de 'app' à la fin du fichier ou utilisation directe
-from app import app 
+# --- 1. CONFIGURATION SQLALCHEMY (Image 15) ---
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-# --- FONCTION DE CONNEXION ---
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row 
-    return conn
+# --- 2. MODELES POUR L'EXERCICE (Images 15 & 17) ---
+class Group(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    # Relation un-à-plusieurs (Image 17)
+    etudiants = db.relationship('Etudiant', backref='group', lazy=True)
 
-# --- ROUTES ---
+class Etudiant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nom = db.Column(db.String(80), unique=True, nullable=False)
+    adresse = db.Column(db.String(120), unique=True, nullable=False)
+    pin = db.Column(db.String(20), unique=True, nullable=False)
+    # Clé étrangère (Image 17)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
 
-# 1. Affiche le formulaire sur localhost:5000/ajout
+# --- 3. ROUTES ---
+
+# Affiche ton formulaire HTML
 @app.route('/ajout')
-def new_student():
+def index():
     return render_template('index.html')
 
-# 2. Reçoit les données du bouton "Send"
-@app.route('/add', methods=['POST'])
-def add_record():
-    if request.method == 'POST':
-        try:
-            nm = request.form['n']
-            ad = request.form['add']
-            pn = request.form['pin']
-            gs = request.form['gs']
-            mal = request.form['maladie']
+# # Route pour l'exercice SQLAlchemy (Images 16 & 17)
+# @app.route('/exercice_alchemy')
+# def exercice_alchemy():
+#     db.create_all() # Crée test.db (Image 16)
+    
+#     # On crée le groupe ITS2 s'il n'existe pas
+#     if not Group.query.filter_by(name='ITS2').first():
+#         its2 = Group(name="ITS2")
+#         db.session.add(its2)
+        
+#         # Création des 3 étudiants (Image 17)
+#         john = Etudiant(nom='john', adresse='122 rue paul armangot', pin='123', group=its2)
+#         hafsa = Etudiant(nom='hafsa', adresse='rue de paris', pin='456', group=its2)
+#         lucas = Etudiant(nom='lucas', adresse='avenue des champs', pin='789', group=its2)
+        
+#         db.session.add_all([john, hafsa, lucas])
+#         db.session.commit() # Valide (Image 16)
+#         return "Succès : Groupe ITS2 et 3 étudiants créés !"
+#     return "L'exercice a déjà été exécuté."
 
-            with get_db_connection() as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO etudiants (nom, addr, pin, gs, maladie) VALUES (?,?,?,?,?)", 
-                            (nm, ad, pn, gs, mal))
-                con.commit()
-                msg = "Enregistrement réussi !"
-        except Exception as e:
-            msg = f"Erreur lors de l'insertion : {e}"
-        finally:
-            return msg
+# # Route pour ton formulaire (Action du bouton Send)
+# @app.route('/add', methods=['POST'])
+# def add_patient():
+#     # Récupération des données du formulaire
+#     nom = request.form['n']
+#     adresse = request.form['add']
+#     pin = request.form['pin']
+#     gs = request.form['gs']
+#     maladie = request.form['maladie']
 
-# 3. Route pour consulter les données (ex: /sante/1/maladie)
-@app.route('/sante/<int:patient_id>/<choix>')
-def consulter_sante(patient_id, choix):
-    con = get_db_connection()
-    patient = con.execute('SELECT * FROM etudiants WHERE id = ?', (patient_id,)).fetchone()
-    con.close()
-
-    if patient is None:
-        return jsonify({"erreur": "Patient introuvable"}), 404
-
-    if choix in patient.keys():
-        return jsonify({choix: patient[choix]})
-    else:
-        return jsonify({"erreur": "Paramètre inconnu"}), 404
+#     # Ici, tu peux garder ton ancienne logique sqlite3 pour database.db
+#     with sqlite3.connect("database.db") as con:
+#         cur = con.cursor()
+#         cur.execute("INSERT INTO patients (nom, adresse, pin, gs, maladie) VALUES (?,?,?,?,?)", 
+#                     (nom, adresse, pin, gs, maladie))
+#         con.commit()
+    
+#     return "Patient ajouté avec succès dans database.db !"
