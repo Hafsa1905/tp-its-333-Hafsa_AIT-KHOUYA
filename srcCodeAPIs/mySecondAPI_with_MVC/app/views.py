@@ -29,3 +29,14 @@ def search_api():
         "status": "success",
         "message": f"Bonjour {query_name}, votre paramètre a bien été récupéré !"
     })
+
+### version "inverse" (Contrôleur vers Vue)
+
+@app.route('/params', methods=['GET'])
+def display_params():
+    # On récupère les deux paramètres de l'URL
+    nom = request.args.get('surname', 'Non renseigné')
+    prenom = request.args.get('name', 'Non renseigné')
+    
+    # On les envoie au fichier HTML
+    return render_template('index.html', surname=nom, name=prenom)
