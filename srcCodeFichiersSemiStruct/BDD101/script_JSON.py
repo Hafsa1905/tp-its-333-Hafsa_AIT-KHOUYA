@@ -23,3 +23,6 @@ print("--- Propriété prop1 ajoutée ---")
 # --- ÉTAPE FINALE : Sauvegarder les modifications dans le fichier ---
 with open('data.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, indent=4)
+# Affichage formaté (comme sur ta capture d'écran)
+print("\n--- Résultat Final Formaté ---")
+print(json.dumps(data["features"], sort_keys=True, indent=4))
