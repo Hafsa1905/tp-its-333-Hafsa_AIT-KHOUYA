@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dashboard Hafsa</title></head>
+<body>
+    <h1>📋 Données Centralisées (Microservices)</h1>
+    <table border="1" style="width:100%; text-align:left;">
+        <tr style="background-color: #eee;">
+            <th>ID</th>
+            <th>Nom (Service 5001)</th>
+            <th>Poids (Service 5002)</th>
+            <th>Taille (Service 5002)</th>
+        </tr>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.poids }}</td>
+            <td>{{ item.taille }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
