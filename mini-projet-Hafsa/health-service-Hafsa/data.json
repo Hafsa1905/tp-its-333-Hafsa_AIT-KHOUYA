@@ -1,7 +1,7 @@
 [
-  {
-    "id_personne": 1,
-    "poids": "70kg",
-    "taille": "1m75"
-  }
+  { "id_personne": 1, "poids": "70kg", "taille": "1m75" },
+  { "id_personne": 2, "poids": "65kg", "taille": "1m68" },
+  { "id_personne": 3, "poids": "80kg", "taille": "1m82" },
+  { "id_personne": 4, "poids": "55kg", "taille": "1m60" },
+  { "id_personne": 5, "poids": "75kg", "taille": "1m80" }
 ]

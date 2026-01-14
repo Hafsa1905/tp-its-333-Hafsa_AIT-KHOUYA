@@ -6,15 +6,19 @@ app = Flask(__name__)
 
 @app.route('/health/<int:person_id>', methods=['GET'])
 def get_health(person_id):
-    if not os.path.exists('data.json'):
-        return jsonify({"error": "Fichier non trouve"}), 404
-    with open('data.json', 'r') as f:
+    file_path = 'data.json'
+    if not os.path.exists(file_path):
+        return jsonify({"poids": "N/A", "taille": "N/A"}), 200
+    
+    with open(file_path, 'r') as f:
         data = json.load(f)
-    # On cherche les infos santé correspondant à l'ID
+    
+    # Recherche de l'ID dans le fichier JSON
     result = next((item for item in data if item["id_personne"] == person_id), None)
+    
     if result:
         return jsonify(result)
-    return jsonify({"error": "ID inconnu"}), 404
+    return jsonify({"poids": "N/A", "taille": "N/A"}), 200
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)
